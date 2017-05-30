@@ -1,10 +1,8 @@
 var request = require('request');
 
-var workId = '78';
-var votesCount = 100;
-
-
-var votesProcessed = 1;
+var workId = '85';
+var votesCount = 10000;
+var votesProcessed = 0;
 
 var options = {
   url: 'https://www.rigassatiksme.lv/ru/konkurs/konkurs-detskikh-risunkov-dlya-novogo-dizaina-zheltogo-e-talona-7',
@@ -21,16 +19,15 @@ var options = {
   }
 };
 
-function callback(error, response, body) {
-	console.log('\033[2J');
-    if (!error) {
-        console.log('Success!');
-    } else {
-		console.log('error! ',response, response.statusCode);
+let processed = 0;
+let int = setInterval(() => {
+	if(votesProcessed >= votesCount){
+		clearInterval(int);
+		console.log('Done!' + votesProcessed + ' added!');
+	} 
+	if(votesProcessed % 10 == 0){
+		console.log(votesProcessed);
 	}
-	console.log(votesProcessed++ + ' / ' + votesCount);
-}
-
-for(var i = 0; i <votesCount; i++){
-	request.post(options, callback);
-}
+	votesProcessed++;
+	request.post(options)
+}, 10)
